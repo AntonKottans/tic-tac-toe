@@ -183,6 +183,16 @@ const checkEndGameAndShowResultsIfNeeded = () => {
   nodes.endGame.classList.remove("hidden");
 };
 
+const makeMove = ({ x, y, playerOrEnemy }) => {
+  if (playerOrEnemy === "enemy") {
+    nodes.tiles[y][x].classList.add(constants.oImageStyles[randomNumber(0, 2)]);
+    state.occupiedTiles[y][x] = "enemy";
+  } else {
+    nodes.tiles[y][x].classList.add(constants.xImageStyles[randomNumber(0, 2)]);
+    state.occupiedTiles[y][x] = "player";
+  }
+};
+
 const makeMoveAI = () => {
   console.log(
     "recievePossibleWinConditions('enemy')",
@@ -194,39 +204,46 @@ const makeMoveAI = () => {
       return moveVariant1.freeTiles - moveVariant2.freeTiles;
     })
   );
+  console.log(recievePossibleWinConditions("enemy"));
   const bestwinConditions = recievePossibleWinConditions("enemy")
     .sort((moveVariant1, moveVariant2) => {
       return moveVariant1.freeTiles - moveVariant2.freeTiles;
     })
     .filter((variant, _, arr) => {
-      console.log(arr[0],variant)
+      console.log(arr[0], variant);
       return variant.freeTiles === arr[0].freeTiles;
     });
   console.log("bestwinConditions,", bestwinConditions);
   if (bestwinConditions.length) {
-    //console.log(bestwinConditions);
-    /*     bestWinConditionCoords = winConditions.reduce((winCondition)=>{
-      return 
-    },{}) */
-    //console.log(bestWinConditionCoords)
-    randombestWinCondition =
+    const randombestWinCondition =
       bestwinConditions[randomNumber(0, bestwinConditions.length - 1)];
-    const enemyMoveCoords =
+    const { x, y } =
       randombestWinCondition.coordsOfFreeTiles[
         randomNumber(0, randombestWinCondition.coordsOfFreeTiles.length - 1)
       ];
-    console.log(enemyMoveCoords);
-    //prettier-ignore
-    nodes.tiles[enemyMoveCoords.y][enemyMoveCoords.x]
-      .classList.add(constants.oImageStyles[randomNumber(0,2)])
-    state.occupiedTiles[enemyMoveCoords.y][enemyMoveCoords.x] = "enemy";
+    makeMove({ x, y, playerOrEnemy: "enemy" });
   } else {
-    const playerWinCondition = recievePossibleWinConditions("player");
-    if (playerWinCondition.length) {
-      //todo if possible win condition to player, prevent it
+    const playerWinConditions = recievePossibleWinConditions("player");
+    if (playerWinConditions.length) {
+      const bestPlayerWinCondition = playerWinConditions.sort(
+        (moveVariant1, moveVariant2) => {
+          return moveVariant1.freeTiles - moveVariant2.freeTiles;
+        }
+      )[0];
+      const { x, y } =
+        bestPlayerWinCondition.coordsOfFreeTiles[
+          randomNumber(0, bestPlayerWinCondition.coordsOfFreeTiles.length - 1)
+        ];
+      makeMove({ x, y, playerOrEnemy: "enemy" });
     }
   }
-
+  console.log(
+    recievePossibleWinConditions("player").sort(
+      (moveVariant1, moveVariant2) => {
+        return moveVariant1.freeTiles - moveVariant2.freeTiles;
+      }
+    )[0]
+  );
   checkEndGameAndShowResultsIfNeeded();
 };
 
@@ -248,28 +265,23 @@ recognition.onresult = ({ results }) => {
   const alternatives = Object.values(results[0]).map(
     (record) => record.transcript
   );
-  //console.log("record.results", alternatives);
   console.log("alternatives", alternatives);
   console.log("onresult");
   const coords = alternatives
     .map((alternative) => findKeywords(alternative, constants.keyWords))
     .sort((a, b) => b.length - a.length)
-    //.map((element) => (console.log(element), element))
     .map((foundKeywords) => wordsToJSCoords(foundKeywords))
-    //.map((element) => (console.log(element), element))
     .find((_) => _);
-  //console.log("coords!!!!!", coords);
   if (!coords) {
-    console.log("wrong input");
+    //console.log("wrong input");
     //todo wrong input alert
     return undefined;
-  }
-  //const coords = wordsToJSCoords(saidPosition);
-  else {
+  } else {
     nodes.tiles[coords.y][coords.x].classList.add("highlighted");
     state.currentMove = { x: coords.x, y: coords.y };
     nodes.confirmMove.classList.remove("hidden");
   }
+  recognition.stop();
 };
 
 createFieldAndTiles = ({ sideSize = 5 }) => {
@@ -368,11 +380,11 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 recognition.onstart = () => {
-  nodes.makeMove.classList.add(".recording");
+  nodes.makeMove.classList.add("recording");
   console.log("onstart");
 };
 
 recognition.onend = () => {
-  nodes.makeMove.classList.remove(".recording");
+  nodes.makeMove.classList.remove("recording");
   console.log("onend");
 };

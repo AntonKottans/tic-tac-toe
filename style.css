@@ -24,6 +24,19 @@
   background-image: url("./img/x2.png");
 }
 
+.x3-tile {
+  background-image: url("./img/x3.png");
+}
+
+.o1-tile,
+.o2-tile,
+.o3-tile,
+.x1-tile,
+.x2-tile,
+.x3-tile {
+  width: 100%;
+}
+
 .body {
   padding: 5px;
   display: grid;
@@ -33,6 +46,9 @@
   align-items: center;
   width: 100vw;
   height: 100vh;
+  background: center no-repeat url("./img/800px-Compass-modified.png");
+  background-size: 660px auto;
+  background-position: 48.5% 54%;
 }
 
 .field {
@@ -58,12 +74,24 @@
     width: 50px;
     height: 50px;
      */
-  background-color: green;
+  background-color: rgba(0, 255, 0, 0.1);
+  border: 3px solid rgb(140, 140, 200);
 }
 
+.field-tile:nth-child(-n + 5) {
+  border-top: none;
+}
 
-.x3-tile {
-  background-image: url("./img/x3.png");
+.field-tile:nth-child(5n + 1) {
+  border-left: none;
+}
+
+.field-tile:nth-child(5n) {
+  border-right: none;
+}
+
+.field-tile:nth-child(n+20) {
+  border-bottom: none;
 }
 
 .highlighted {
@@ -127,14 +155,24 @@
 .end-game-alert-text {
 }
 
-.make-move-button {
-  width: min-content;
-  height: min-content;
+.make-move {
+  width: 200px;
+  height: 40px;
   margin: 0 auto;
-  white-space: nowrap;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: lightgreen;
+}
+
+.recording {
+  background-color: red;
+}
+
+.recording .microphone {
+  display: inline;
 }
 
 .hidden {
   display: none;
 }
-
