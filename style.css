@@ -48,7 +48,6 @@
   height: 100vh;
   background: center no-repeat url("./img/800px-Compass-modified.png");
   background-size: 660px auto;
-  background-position: 48.5% 54%;
 }
 
 .field {
@@ -67,13 +66,27 @@
   white-space: nowrap;
 }
 
+.make-move {
+  width: 200px;
+  height: 40px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.start-new-game,
+.make-move {
+  background-color: lightgreen;
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+  box-shadow: inset;
+}
+
 .field-tile {
   width: 80px;
   height: 80px;
-  /* small
-    width: 50px;
-    height: 50px;
-     */
   background-color: rgba(0, 255, 0, 0.1);
   border: 3px solid rgb(140, 140, 200);
 }
@@ -90,7 +103,7 @@
   border-right: none;
 }
 
-.field-tile:nth-child(n+20) {
+.field-tile:nth-child(n + 20) {
   border-bottom: none;
 }
 
@@ -99,13 +112,10 @@
 }
 
 .confirm-container {
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
-  z-index: 3000;
+
 }
+
 .confirm-inner-container {
-  background-color: rgba(0, 255, 0, 0.5);
   width: 300px;
   height: 200px;
   display: flex;
@@ -118,6 +128,7 @@
   display: block;
   white-space: nowrap;
   width: min-content;
+  font-weight: bold;
 }
 
 .confirm-yes,
@@ -126,22 +137,23 @@
   height: min-content;
   padding: 5px;
   margin: 10px;
+  cursor: pointer;
+  border: none;
+  background-color: lightgreen;
+  font-weight: bold;
 }
 
 .occupied-tile-alert-container {
-  position: absolute;
-  display: flex;
-  z-index: 3000;
-  width: 100vw;
-  height: 100vh;
-  align-items: center;
-  justify-content: center;
-}
 
-.occupied-alert-tile {
 }
 
 .end-game-alert-container {
+
+}
+
+.occupied-tile-alert-container,
+.end-game-alert-container,
+.confirm-container{
   position: absolute;
   width: 100vw;
   height: 100vh;
@@ -152,17 +164,10 @@
   justify-content: center;
 }
 
-.end-game-alert-text {
+.occupied-alert-tile {
 }
 
-.make-move {
-  width: 200px;
-  height: 40px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: lightgreen;
+.end-game-alert-text {
 }
 
 .recording {
